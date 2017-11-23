@@ -29,6 +29,8 @@
 @property(nonatomic,strong)UIScrollView *scrollView;
 /**购买数量*/
 @property(nonatomic,strong)UILabel *buyNumL;
+/**底部确定按钮*/
+@property(nonatomic,strong)UIButton *finishBtn;
 /**SKUNumberView*/
 @property(nonatomic,strong)SKUNumberView *numberView;
 /**是否已经执行了动画效果*/
@@ -159,6 +161,7 @@
     bottomBtn.backgroundColor = [UIColor orangeColor];
     [bottomBtn setTitle:@"确定" forState:UIControlStateNormal];
     [_innerView addSubview:bottomBtn];
+    self.finishBtn = bottomBtn;
     
     //添加清扫手势
     UISwipeGestureRecognizer *swip = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swip:)];
@@ -238,8 +241,8 @@
         self.scrollView.contentSize = CGSizeMake(0,self.scrollView.height+30);
     }
     //设置相关控件的样式
-    if ([self.delegate respondsToSelector:@selector(configImageView:price:store:desc:number:)]) {
-        [self.delegate configImageView:self.imageView price:self.priceL store:self.storeL desc:self.descL number:self.numberView];
+    if ([self.delegate respondsToSelector:@selector(configImageView:price:store:desc:finishBtn:number:)]) {
+        [self.delegate configImageView:self.imageView price:self.priceL store:self.storeL desc:self.descL finishBtn:self.finishBtn number:self.numberView];
         //监听到值改了之后的重新设置尺寸
         CGFloat descH = 20;
         if (self.priceL.text.length > 0 ) {

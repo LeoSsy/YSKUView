@@ -97,7 +97,7 @@
     scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGRectGetMaxY(lastLael.frame));
 }
 
-- (void)configImageView:(UIImageView *)imageView price:(UILabel *)priceL store:(UILabel *)storeL desc:(UILabel *)descL number:(SKUNumberView *)numberView {
+- (void)configImageView:(UIImageView *)imageView price:(UILabel *)priceL store:(UILabel *)storeL desc:(UILabel *)descL finishBtn:(UIButton *)finishBtn number:(SKUNumberView *)numberView {
     priceL.text =@"¥ 9999.99";
     storeL.text = @"库存数量 : 9999999件";
     descL.text = @"请选择你需要的产品类型规格";
@@ -105,6 +105,7 @@
     numberView.maxNumber = 10;
     numberView.hintLabel.font = [UIFont systemFontOfSize:12];
     imageView.image = [UIImage imageNamed:@"123"];
+    finishBtn.backgroundColor = [UIColor orangeColor];
 }
 
 - (void)skuCloseBtnClicked {

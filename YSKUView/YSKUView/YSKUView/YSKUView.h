@@ -28,12 +28,14 @@
  *  @param  priceL      价格视图
  *  @param  storeL      库存视图
  *  @param  descL       描述视图
+ *  @param  finishBtn   完成按钮
  *  @param  numberView   数量选择视图
  */
 - (void) configImageView:(UIImageView *) imageView
                    price:(UILabel *) priceL
                    store:(UILabel *) storeL
                    desc:(UILabel *) descL
+                   finishBtn:(UIButton *) finishBtn
                   number:(SKUNumberView *) numberView;
 
 /**
