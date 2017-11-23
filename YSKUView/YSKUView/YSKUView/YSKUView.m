@@ -48,6 +48,7 @@
 @synthesize descL = _descL;
 @synthesize scrollView = _scrollView;
 @synthesize buyNumL = _buyNumL;
+@synthesize finishBtn = _finishBtn;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {

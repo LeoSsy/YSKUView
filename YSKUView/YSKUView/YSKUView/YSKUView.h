@@ -73,6 +73,8 @@
 @property(nonatomic,strong,readonly)UIScrollView *scrollView;
 /**购买数量*/
 @property(nonatomic,strong,readonly)UILabel *buyNumL;
+/**底部确定按钮*/
+@property(nonatomic,strong,readonly)UIButton *finishBtn;
 /**显示方法*/
 - (void)show;
 /**消失方法*/
