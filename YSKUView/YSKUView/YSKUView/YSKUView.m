@@ -9,7 +9,6 @@
 #import "YSKUView.h"
 #import "SKUNumberView.h"
 #import "NSString+SY.h"
-
 @interface YSKUView()<UIScrollViewDelegate>
 /**最下面的视图*/
 @property(nonatomic,strong)UIView *innerView;
@@ -41,15 +40,6 @@
 
 @implementation YSKUView
 
-@synthesize contentView = _contentView;
-@synthesize imageView = _imageView;
-@synthesize priceL = _priceL;
-@synthesize storeL = _storeL;
-@synthesize descL = _descL;
-@synthesize scrollView = _scrollView;
-@synthesize buyNumL = _buyNumL;
-@synthesize finishBtn = _finishBtn;
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         [self setup];
@@ -62,6 +52,22 @@
         [self setup];
     }
     return self;
+}
+
+/**设置商品价格*/
+- (void)setPriceText:(NSString*)text {
+    _priceL.text = text;
+    [_priceL sizeToFit];
+}
+/**设置商品库存*/
+- (void)setStoreText:(NSString*)text {
+    _storeL.text = text;
+    [_storeL sizeToFit];
+}
+/**设置商品描述*/
+- (void)setDescText:(NSString*)text {
+    _descL.text = text;
+    _descL.width = [self setNormalDesclW];
 }
 
 /**
@@ -105,7 +111,7 @@
     [_contentView addSubview:closeBtn];
     CGFloat closeBtnW = 40;
     closeBtn.frame = CGRectMake(SKUWidth-closeBtnW, 0, closeBtnW, closeBtnW);
-
+    
     CGFloat priceX = CGRectGetMaxX(_imageView.frame)+SKUMargin;
     CGFloat descH = 20;
     //价格
@@ -141,7 +147,7 @@
     _storeL.font = [UIFont systemFontOfSize:12];
     [_contentView addSubview:_storeL];
     
-   //创建scrollview
+    //创建scrollview
     CGFloat scrollviewY = CGRectGetMaxY(_imageView.frame)+SKUMargin;
     CGFloat scrollviewH = SKUHeight - scrollviewY - bottomBtnH;
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, scrollviewY, SKUWidth, scrollviewH)];
@@ -155,7 +161,7 @@
     _lineView.backgroundColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.3];
     _lineView.frame = CGRectMake(0, scrollviewY, _scrollView.width, 0.5);
     [_contentView addSubview:_lineView];
-
+    
     //添加底部按钮
     UIButton *bottomBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, _innerView.height-bottomBtnH, SKUWidth, bottomBtnH)];
     [bottomBtn addTarget:self action:@selector(bottomBtnClick) forControlEvents:UIControlEventTouchUpInside];
@@ -297,8 +303,8 @@
         _storeL.y = CGRectGetMaxY(_priceL.frame);
         _storeL.centerX = self.centerX;
         //商品描述
-         _descL.y = CGRectGetMaxY(_storeL.frame);
-         _descL.width =  [self setAnimatedDesclW];
+        _descL.y = CGRectGetMaxY(_storeL.frame);
+        _descL.width =  [self setAnimatedDesclW];
         _descL.centerX = self.centerX;
         //创建scrollview
         CGFloat scrollviewY = CGRectGetMaxY(_descL.frame)+SKUMargin;
@@ -466,5 +472,7 @@
 {
     return self.center.y;
 }
-
 @end
+
+
+

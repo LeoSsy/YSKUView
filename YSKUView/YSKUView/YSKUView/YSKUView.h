@@ -34,8 +34,8 @@
 - (void) configImageView:(UIImageView *) imageView
                    price:(UILabel *) priceL
                    store:(UILabel *) storeL
-                   desc:(UILabel *) descL
-                   finishBtn:(UIButton *) finishBtn
+                    desc:(UILabel *) descL
+               finishBtn:(UIButton *) finishBtn
                   number:(SKUNumberView *) numberView;
 
 /**
@@ -63,27 +63,24 @@
 @property(nonatomic,weak)id<YSKUViewDelegate> delegate;
 /**商品图片*/
 @property(nonatomic,strong,readonly)UIImageView *imageView;
-/**商品价格*/
-@property(nonatomic,strong,readonly)UILabel *priceL;
-/**商品库存*/
-@property(nonatomic,strong,readonly)UILabel *repostoryL;
-/**商品描述*/
-@property(nonatomic,strong,readonly)UILabel *descL;
-/**scrollView*/
-@property(nonatomic,strong,readonly)UIScrollView *scrollView;
-/**购买数量*/
-@property(nonatomic,strong,readonly)UILabel *buyNumL;
 /**底部确定按钮*/
 @property(nonatomic,strong,readonly)UIButton *finishBtn;
+/** 刷新数据 调用此方法会会执行代理方法 重新布局界面*/
+- (void) reloadData;
+/**设置商品价格*/
+- (void)setPriceText:(NSString*)text;
+/**设置商品库存*/
+- (void)setStoreText:(NSString*)text;
+/**设置商品描述*/
+- (void)setDescText:(NSString*)text;
 /**显示方法*/
 - (void)show;
 /**消失方法*/
 - (void)dismiss;
-/** 刷新数据 调用此方法会会执行代理方法 重新布局界面*/
-- (void) reloadData;
 @end
 
 @interface UIView (SY)
+
 @property(nonatomic,assign)CGSize size;
 @property(nonatomic,assign)CGFloat width;
 @property(nonatomic,assign)CGFloat height;
@@ -92,3 +89,6 @@
 @property(nonatomic,assign)CGFloat centerX;
 @property(nonatomic,assign)CGFloat centerY;
 @end
+
+
+
