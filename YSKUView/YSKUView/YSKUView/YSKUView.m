@@ -9,6 +9,8 @@
 #import "YSKUView.h"
 #import "SKUNumberView.h"
 #import "NSString+SY.h"
+
+#define YSKUViewImageWH 80 //顶部图片的宽高
 @interface YSKUView()<UIScrollViewDelegate>
 /**最下面的视图*/
 @property(nonatomic,strong)UIView *innerView;
@@ -96,7 +98,7 @@
     [_innerView addSubview:_contentView];
     
     //创建顶部商品图片
-    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(SKUMargin, SKUMargin, 80, 80)];
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(SKUMargin, SKUMargin, YSKUViewImageWH, YSKUViewImageWH)];
     _imageView.backgroundColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.3];
     _imageView.contentMode = UIViewContentModeScaleAspectFill;
     _imageView.clipsToBounds = true;
@@ -170,10 +172,16 @@
     [_innerView addSubview:bottomBtn];
     self.finishBtn = bottomBtn;
     
-    //添加清扫手势
-    UISwipeGestureRecognizer *swip = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swip:)];
-    swip.direction = UISwipeGestureRecognizerDirectionUp|UISwipeGestureRecognizerDirectionDown;
-    [_contentView addGestureRecognizer:swip];
+    //添加向下轻扫手势
+    UISwipeGestureRecognizer *swipDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swip:)];
+    swipDown.direction = UISwipeGestureRecognizerDirectionDown;
+    [_contentView addGestureRecognizer:swipDown];
+    
+    //添加向上轻扫手势
+    UISwipeGestureRecognizer *swipUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swip:)];
+    swipUp.direction = UISwipeGestureRecognizerDirectionUp;
+    [_contentView addGestureRecognizer:swipUp];
+    
     
     //监听键盘的弹出和消失通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
@@ -204,7 +212,7 @@
 - (CGFloat)setNormalDesclW{
     CGFloat descH = 20;
     //重新计算描述信息的宽度
-    CGFloat priceX = 80+2*SKUMargin;
+    CGFloat priceX = YSKUViewImageWH+2*SKUMargin;
     CGFloat desicNomalW =  SKUWidth-priceX-40;
     CGFloat descW = [_descL.text textWidthWithHeight:descH font:_descL.font.pointSize];
     if (descW>desicNomalW) {
@@ -298,6 +306,7 @@
         //价格
         _priceL.font = [UIFont systemFontOfSize:15];
         _priceL.y = CGRectGetMaxY(_imageView.frame)+SKUMargin;
+        [_priceL sizeToFit];
         _priceL.centerX = self.centerX;
         //库存
         _storeL.y = CGRectGetMaxY(_priceL.frame);
@@ -322,6 +331,8 @@
     self.isAnimated = false;
     CGFloat descH = 20;
     CGFloat bottomBtnH = 45;
+    _priceL.font = [UIFont systemFontOfSize:20];
+    [_priceL sizeToFit];
     [UIView animateWithDuration:0.35 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
         //商品图片
         _imageView.frame = CGRectMake(SKUMargin, SKUMargin, 80, 80);
@@ -330,7 +341,6 @@
         CGFloat priceX = CGRectGetMaxX(_imageView.frame)+SKUMargin;
         //价格
         _priceL.frame =CGRectMake(priceX,CGRectGetMinY(_imageView.frame)+5,_priceL.width, descH);
-        _priceL.font = [UIFont systemFontOfSize:20];
         //商品描述
         //重新计算描述信息的宽度
         _descL.frame = CGRectMake(priceX, CGRectGetMaxY(_imageView.frame)-descH,  [self setNormalDesclW], descH);
@@ -371,11 +381,10 @@
 #pragma mark swip
 - (void)swip:(UISwipeGestureRecognizer*)swip {
     [self endEditing:YES];
-    //往下滑动 执行动画
-    if (self.isAnimated) { //如果已经动画了 就恢复动画
-        [self resentFrame];
-    }else{
+    if (swip.direction == UISwipeGestureRecognizerDirectionDown){  //往下滑动 执行动画
         [self startAnimation];
+    }else if (swip.direction == UISwipeGestureRecognizerDirectionUp){    //往上滑动 恢复动画
+        [self resentFrame];
     }
 }
 
