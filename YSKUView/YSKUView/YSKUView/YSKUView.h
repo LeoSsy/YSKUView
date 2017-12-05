@@ -73,6 +73,8 @@
 - (void)setStoreText:(NSString*)text;
 /**设置商品描述*/
 - (void)setDescText:(NSString*)text;
+/**获取购买数量*/
+- (NSInteger)num;
 /**显示方法*/
 - (void)show;
 /**消失方法*/

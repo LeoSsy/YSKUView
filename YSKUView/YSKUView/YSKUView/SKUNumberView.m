@@ -41,6 +41,14 @@
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        _contentSize = CGSizeZero;
+        [self commonInit];
+    }
+    return self;
+}
+
 - (void) commonInit {
     self.backgroundColor = [UIColor redColor];
     _padding = 10.0f;
@@ -51,7 +59,7 @@
     [self addSubview:self.textField];
     [self addSubview:self.topLine];
     [self addSubview:self.bottomLine];
-
+    
     self.minNumber = 1;
     self.maxNumber = NSUIntegerMax;
     self.backgroundColor = [UIColor clearColor];
@@ -89,6 +97,10 @@
     if (currentNumber >= _minNumber) {
         self.currentValue = currentNumber;
     }
+    //告诉代理数量改变
+    if ([self.delegate respondsToSelector:@selector(numberDidChanged:)]) {
+        [self.delegate numberDidChanged:currentNumber];
+    }
     [self enableButtonWithValue:currentNumber];
 }
 
@@ -100,6 +112,10 @@
     } else {
         currentNumber = _maxNumber;
     }
+    //告诉代理数量改变
+    if ([self.delegate respondsToSelector:@selector(numberDidChanged:)]) {
+        [self.delegate numberDidChanged:currentNumber];
+    }
     [self enableButtonWithValue:currentNumber];
 }
 
@@ -109,6 +125,25 @@
         result = _minNumber;
     }
     self.textField.text = [NSString stringWithFormat:@"%@", @(result)];
+}
+
+- (void)setShowHintLabel:(BOOL)showHintLabel {
+    _showHintLabel = showHintLabel;
+    if (showHintLabel) {
+        _hintLabel.frame = CGRectMake(_padding,_padding,self.frame.size.width,20);
+        _minusButton.frame = CGRectMake(_padding , CGRectGetMaxY(self.hintLabel.frame)+_padding, 40, 40);
+        _textField.frame = CGRectMake(CGRectGetMaxX(self.minusButton.frame), self.minusButton.frame.origin.y, 50, 40);
+        _topLine.frame = CGRectMake(self.textField.frame.origin.x, self.textField.frame.origin.y,  self.textField.frame.size.width, 0.8);
+        _bottomLine.frame = CGRectMake(self.textField.frame.origin.x, CGRectGetMaxY(self.textField.frame)-0.8,  self.textField.frame.size.width, 0.8);
+        _addButton.frame = CGRectMake(CGRectGetMaxX(self.textField.frame), self.minusButton.frame.origin.y, 40, 40);
+    }else{
+        _hintLabel.frame = CGRectZero;
+        _minusButton.frame = CGRectMake(0 , 0, 40, 40);
+        _textField.frame = CGRectMake(CGRectGetMaxX(self.minusButton.frame), self.minusButton.frame.origin.y, 50, 40);
+        _topLine.frame = CGRectMake(self.textField.frame.origin.x, self.textField.frame.origin.y,  self.textField.frame.size.width, 0.8);
+        _bottomLine.frame = CGRectMake(self.textField.frame.origin.x, CGRectGetMaxY(self.textField.frame)-0.8,  self.textField.frame.size.width, 0.8);
+        _addButton.frame = CGRectMake(CGRectGetMaxX(self.textField.frame), self.minusButton.frame.origin.y, 40, 40);
+    }
 }
 
 #pragma mark --
@@ -126,7 +161,7 @@
 - (UILabel *) hintLabel {
     if (!_hintLabel) {
         _hintLabel = [[UILabel alloc] initWithFrame:
-                     CGRectMake(_padding,_padding,self.frame.size.width,20)];
+                      CGRectMake(_padding,_padding,self.frame.size.width,20)];
         _hintLabel.backgroundColor = [UIColor clearColor];
         _hintLabel.font = [UIFont systemFontOfSize:_fontSize - 3];
         _hintLabel.text = @"购买数量";
@@ -169,7 +204,7 @@
 - (UIView *) topLine {
     if (!_topLine) {
         _topLine = [[UIView alloc] initWithFrame:
-                      CGRectMake(self.textField.frame.origin.x, self.textField.frame.origin.y,  self.textField.frame.size.width, 0.8)];
+                    CGRectMake(self.textField.frame.origin.x, self.textField.frame.origin.y,  self.textField.frame.size.width, 0.8)];
         _topLine.backgroundColor = kWhiteGrayColor;
     }
     return _topLine;
@@ -178,7 +213,7 @@
 - (UIView *) bottomLine {
     if (!_bottomLine) {
         _bottomLine = [[UIView alloc] initWithFrame:
-                    CGRectMake(self.textField.frame.origin.x, CGRectGetMaxY(self.textField.frame)-0.8,  self.textField.frame.size.width, 0.8)];
+                       CGRectMake(self.textField.frame.origin.x, CGRectGetMaxY(self.textField.frame)-0.8,  self.textField.frame.size.width, 0.8)];
         _bottomLine.backgroundColor = kWhiteGrayColor;
     }
     return _bottomLine;
@@ -208,6 +243,10 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     if (textField.text.length == 0) {
         self.currentValue = _minNumber;
+        //告诉代理数量改变
+        if ([self.delegate respondsToSelector:@selector(numberDidChanged:)]) {
+            [self.delegate numberDidChanged:self.currentValue];
+        }
         [self enableButtonWithValue:self.currentValue];
     }
 }
@@ -220,6 +259,10 @@
     }
     NSInteger currentNumber = [result integerValue];
     if (currentNumber <= _maxNumber && currentNumber >= _minNumber) {
+        //告诉代理数量改变
+        if ([self.delegate respondsToSelector:@selector(numberDidChanged:)]) {
+            [self.delegate numberDidChanged:currentNumber];
+        }
         [self enableButtonWithValue:currentNumber];
         return YES;
     }
@@ -227,3 +270,4 @@
 }
 
 @end
+

@@ -72,6 +72,13 @@
     _descL.width = [self setNormalDesclW];
 }
 
+/**获取购买数量*/
+- (NSInteger)num {
+    if (self.numberView!=nil) {
+        return [self.numberView.textField.text integerValue];
+    }
+    return 1;
+}
 /**
  初始化
  */
@@ -82,7 +89,7 @@
     
     //创建蒙版
     UIView *coverV = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    coverV.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
+    coverV.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
     [coverV addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(coverTap)]];
     [self addSubview:coverV];
     
@@ -194,6 +201,8 @@
 
 #pragma mark 键盘相关通知
 - (void)keyboardWillShow:(NSNotification*)note {
+    //键盘显示 恢复顶部图片的frame
+    [self resentFrame];
     self.isKeyboarShow = true;
     [self.scrollView setContentOffset:CGPointMake(0, CGRectGetMinY(self.numberView.frame)+SKUMargin) animated:YES];
 }
