@@ -10,6 +10,7 @@
 #import "SKUNumberView.h"
 #import "NSString+SY.h"
 
+
 #define YSKUViewImageWH 80 //顶部图片的宽高
 @interface YSKUView()<UIScrollViewDelegate>
 /**最下面的视图*/
@@ -38,9 +39,21 @@
 @property(nonatomic,assign)BOOL isAnimated ;
 /**保存键盘是否已经弹起*/
 @property(nonatomic,assign)BOOL isKeyboarShow ;
+/**菊花控件*/
+@property(nonatomic,strong)UIActivityIndicatorView *indicatorView ;
 @end
 
 @implementation YSKUView
+
+- (UIActivityIndicatorView *)indicatorView {
+    if (!_indicatorView) {
+        _indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        _indicatorView.hidesWhenStopped = YES;
+        _indicatorView.center = self.contentView.center;
+        [self.contentView addSubview:_indicatorView];
+    }
+    return _indicatorView;
+}
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
@@ -294,6 +307,10 @@
 
 #pragma mark 消失方法
 - (void)dismiss{
+    //隐藏菊花控件
+    if (self.indicatorView.isAnimating) {
+        [self.indicatorView stopAnimating];
+    }
     [UIView animateWithDuration:0.25 animations:^{
         _innerView.y = SCREENH;
     } completion:^(BOOL finished) {
@@ -382,6 +399,8 @@
  确定按钮点击
  */
 - (void)bottomBtnClick{
+    //显示菊花控件
+    [self.indicatorView startAnimating];
     if ([self.delegate respondsToSelector:@selector(skuFinishBtnClicked)]) {
         [self.delegate skuFinishBtnClicked];
     }
