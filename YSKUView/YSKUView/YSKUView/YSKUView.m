@@ -9,9 +9,8 @@
 #import "YSKUView.h"
 #import "SKUNumberView.h"
 #import "NSString+SY.h"
-
-
 #define YSKUViewImageWH 80 //顶部图片的宽高
+#define YSKUISIPHONEX [UIScreen mainScreen].bounds.size.height == 812.0
 @interface YSKUView()<UIScrollViewDelegate>
 /**最下面的视图*/
 @property(nonatomic,strong)UIView *innerView;
@@ -191,6 +190,9 @@
     [bottomBtn setTitle:@"确定" forState:UIControlStateNormal];
     [_innerView addSubview:bottomBtn];
     self.finishBtn = bottomBtn;
+    if (YSKUISIPHONEX) {
+        bottomBtn.y = bottomBtn.y - 35;
+    }
     
     //添加向下轻扫手势
     UISwipeGestureRecognizer *swipDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swip:)];
@@ -428,6 +430,13 @@
     if (offsetY < 0 ) { //小于0 表示用户往下拖拽
         //如果已经执行过动画 就不需要重新执行
         [self startAnimation];
+    }else{
+        //用户往上面拖拽就恢复动画
+        if (offsetY > 40) {
+            if (self.isAnimated) {
+                [self resentFrame];
+            }
+        }
     }
 }
 
