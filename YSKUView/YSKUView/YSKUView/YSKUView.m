@@ -224,13 +224,11 @@
     CGRect rect= [value CGRectValue];
     //判断当前数量视图的高度 是否大于键盘的高度
     CGRect numberRect = [self.numberView.superview convertRect:self.numberView.frame toView:[UIApplication sharedApplication].windows[0]];
-    CGFloat maxNumverY = CGRectGetMaxY(numberRect);
+    CGFloat maxNumverY = CGRectGetMaxY(numberRect)+25;
     CGFloat keyborderY = SCREENH -  rect.size.height;
     if (maxNumverY > keyborderY) {
-        CGFloat y = self.scrollView.contentOffset.y + (maxNumverY - keyborderY)+SKUNumberViewH;
+        CGFloat y = self.scrollView.contentOffset.y + (maxNumverY - keyborderY);
         [self.scrollView setContentOffset:CGPointMake(0, y) animated:YES];
-    }else{
-        [self.scrollView setContentOffset:CGPointMake(0, CGRectGetMinY(self.numberView.frame)+SKUMargin) animated:YES];
     }
 }
 
