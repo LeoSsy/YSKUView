@@ -172,7 +172,6 @@
     CGFloat scrollviewY = CGRectGetMaxY(_imageView.frame)+SKUMargin;
     CGFloat scrollviewH = SKUHeight - scrollviewY - bottomBtnH;
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, scrollviewY, SKUWidth, scrollviewH)];
-    _scrollView.backgroundColor = [UIColor whiteColor];
     _scrollView.delegate = self;
     _scrollView.contentSize = CGSizeMake(SKUWidth, scrollviewH+30);
     [_contentView addSubview:_scrollView];
@@ -186,12 +185,13 @@
     //添加底部按钮
     UIButton *bottomBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, _innerView.height-bottomBtnH, SKUWidth, bottomBtnH)];
     [bottomBtn addTarget:self action:@selector(bottomBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    bottomBtn.backgroundColor = [UIColor orangeColor];
+    bottomBtn.backgroundColor = YSKUColorFromRGB(0xd32f2f);
     [bottomBtn setTitle:@"确定" forState:UIControlStateNormal];
     [_innerView addSubview:bottomBtn];
     self.finishBtn = bottomBtn;
     if (YSKUISIPHONEX) {
         bottomBtn.y = bottomBtn.y - 35;
+        _scrollView.height -= 35;
     }
     
     //添加向下轻扫手势
@@ -219,7 +219,15 @@
     //键盘显示 恢复顶部图片的frame
     [self resentFrame];
     self.isKeyboarShow = true;
-    [self.scrollView setContentOffset:CGPointMake(0, CGRectGetMinY(self.numberView.frame)+SKUMargin) animated:YES];
+    //获取键盘的高度
+    NSValue *value =  (NSValue*)note.userInfo[@"UIKeyboardFrameEndUserInfoKey"];
+    CGRect rect= [value CGRectValue];
+    if (self.scrollView.height > rect.size.height) {
+        CGFloat y = self.scrollView.contentOffset.y + rect.size.height;
+        [self.scrollView setContentOffset:CGPointMake(0, y) animated:YES];
+    }else{
+        [self.scrollView setContentOffset:CGPointMake(0, CGRectGetMinY(self.numberView.frame)+SKUMargin) animated:YES];
+    }
 }
 
 - (void)keyboardWillHide:(NSNotification*)note {
@@ -346,6 +354,7 @@
         //创建scrollview
         CGFloat scrollviewY = CGRectGetMaxY(_descL.frame)+SKUMargin;
         CGFloat scrollviewH = SKUHeight - scrollviewY - bottomBtnH;
+        if (YSKUISIPHONEX) {scrollviewH -= 35;}
         _scrollView.frame = CGRectMake(0, scrollviewY, SKUWidth, scrollviewH);
         //分割线
         _lineView.y = scrollviewY;
@@ -377,6 +386,7 @@
         //创建scrollview
         CGFloat scrollviewY = CGRectGetMaxY(_imageView.frame)+SKUMargin;
         CGFloat scrollviewH = SKUHeight - scrollviewY - bottomBtnH;
+        if (YSKUISIPHONEX) {scrollviewH -= 35;}
         _scrollView.frame = CGRectMake(0, scrollviewY, SKUWidth, scrollviewH);
     } completion:^(BOOL finished) {}];
 }
@@ -427,7 +437,7 @@
     //键盘退下也会执行此方法 此时不需要执行动画
     if (self.isKeyboarShow) { return; }
     CGFloat offsetY = scrollView.contentOffset.y;
-    if (offsetY < 0 ) { //小于0 表示用户往下拖拽
+    if (offsetY < -40 ) { //小于0 表示用户往下拖拽
         //如果已经执行过动画 就不需要重新执行
         [self startAnimation];
     }else{

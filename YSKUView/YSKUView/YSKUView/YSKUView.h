@@ -16,6 +16,8 @@
 #define SKUMargin 15 //间距
 #define SKUNumberViewH 75 //数量选择视图的高度 默认是75 高度 同时也是最小的高度，如果设置比此值下会出现按钮无法点击的问题
 #define KeyWindow [UIApplication sharedApplication].windows.firstObject
+// rgb颜色转换（16进制->10进制）
+#define YSKUColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @protocol YSKUViewDelegate <NSObject>
 

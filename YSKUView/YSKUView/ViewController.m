@@ -32,21 +32,6 @@
 
 #pragma mark YSKUViewDelegate
 - (void)configScrollViewData:(UIScrollView *)scrollView contentW:(CGFloat)contentW numViewH:(CGFloat)numViewH {
-//    NSUInteger rowCount = 10;
-//    for (int i = 0; i < 3 * rowCount; i++) {
-//        int row = i / 3;
-//        int colomn = i % 3;
-//        UILabel *label = [[UILabel alloc] initWithFrame:
-//                          CGRectMake(80 * colomn + 10 * (colomn + 1), 40 * row + 10 * (row + 1), 80, 40)];
-//        label.text = [NSString stringWithFormat:@"sku-%d--",i];
-//        label.font = [UIFont systemFontOfSize:13];
-//        label.textAlignment = NSTextAlignmentCenter;
-//        label.backgroundColor = [UIColor grayColor];
-//        label.userInteractionEnabled = true;
-//        [label addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)]];
-//        [scrollView addSubview:label];
-//    }
-    
     //计算每一个lael的尺寸
     CGFloat titleHMargin = 20; //标题横向间距
     CGFloat titleVMargin = 15;//标题垂直间距
@@ -94,6 +79,90 @@
         [scrollView addSubview:label];
         lastLael = label;
     }
+    
+    UILabel *section2 = [[UILabel alloc] init];
+    section2.text = @"颜色";
+    section2.font = [UIFont systemFontOfSize:12];
+    section2.textColor = [UIColor blackColor];
+    [scrollView addSubview:section2];
+    section2.frame = CGRectMake(10, CGRectGetMaxY(lastLael.frame), 120, 40);
+    lastLael = nil;
+    for (int i = 0; i < titles.count ; i++) {
+        //当前的标题
+        NSString *title = titles[i];
+        CGRect rect = CGRectZero;
+        if (lastLael == nil) { //第一个
+            //计算标题的宽度
+            CGFloat titleW = [self textWidthWithText:title height:titleH contentW:contentW];
+            rect = CGRectMake(CGRectGetMinX(section2.frame), CGRectGetMaxY(section2.frame), titleW, titleH);
+        }else{
+            //计算标题的宽度
+            CGFloat titleW = [self textWidthWithText:title height:titleH contentW:contentW];
+            //获取上一个标题的最大的x值
+            CGFloat x =  CGRectGetMaxX(lastLael.frame)+titleHMargin;
+            CGFloat maxX = x+titleW;
+            rect = CGRectMake(x, CGRectGetMinY(lastLael.frame), titleW, titleH);
+            //判断总的宽度是否大于内容的宽度
+            if (maxX>contentW) { //如果大于 然后布局到下一行
+                rect.origin.y = CGRectGetMaxY(lastLael.frame)+titleVMargin;
+                rect.origin.x = CGRectGetMinX(section1.frame);
+            }
+        }
+        UILabel *label = [[UILabel alloc] init];
+        label.frame = rect;
+        label.text = title;
+        label.font = [UIFont systemFontOfSize:12];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.2];
+        label.userInteractionEnabled = true;
+        label.layer.cornerRadius = titleH*0.5;
+        label.layer.masksToBounds = true;
+        [label addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)]];
+        [scrollView addSubview:label];
+        lastLael = label;
+    }
+    
+    UILabel *section3 = [[UILabel alloc] init];
+    section3.text = @"尺码";
+    section3.font = [UIFont systemFontOfSize:12];
+    section3.textColor = [UIColor blackColor];
+    [scrollView addSubview:section3];
+    section3.frame = CGRectMake(10, CGRectGetMaxY(lastLael.frame), 120, 40);
+    lastLael = nil;
+    for (int i = 0; i < titles.count ; i++) {
+        //当前的标题
+        NSString *title = titles[i];
+        CGRect rect = CGRectZero;
+        if (lastLael == nil) { //第一个
+            //计算标题的宽度
+            CGFloat titleW = [self textWidthWithText:title height:titleH contentW:contentW];
+            rect = CGRectMake(CGRectGetMinX(section3.frame), CGRectGetMaxY(section3.frame), titleW, titleH);
+        }else{
+            //计算标题的宽度
+            CGFloat titleW = [self textWidthWithText:title height:titleH contentW:contentW];
+            //获取上一个标题的最大的x值
+            CGFloat x =  CGRectGetMaxX(lastLael.frame)+titleHMargin;
+            CGFloat maxX = x+titleW;
+            rect = CGRectMake(x, CGRectGetMinY(lastLael.frame), titleW, titleH);
+            //判断总的宽度是否大于内容的宽度
+            if (maxX>contentW) { //如果大于 然后布局到下一行
+                rect.origin.y = CGRectGetMaxY(lastLael.frame)+titleVMargin;
+                rect.origin.x = CGRectGetMinX(section1.frame);
+            }
+        }
+        UILabel *label = [[UILabel alloc] init];
+        label.frame = rect;
+        label.text = title;
+        label.font = [UIFont systemFontOfSize:12];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.2];
+        label.userInteractionEnabled = true;
+        label.layer.cornerRadius = titleH*0.5;
+        label.layer.masksToBounds = true;
+        [label addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)]];
+        [scrollView addSubview:label];
+        lastLael = label;
+    }
     scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGRectGetMaxY(lastLael.frame));
 }
 
@@ -105,7 +174,7 @@
     numberView.maxNumber = 10;
     numberView.hintLabel.font = [UIFont systemFontOfSize:12];
     imageView.image = [UIImage imageNamed:@"123"];
-    finishBtn.backgroundColor = [UIColor orangeColor];
+    finishBtn.backgroundColor = YSKUColorFromRGB(0xd32f2f);
 }
 
 - (void)skuCloseBtnClicked {
@@ -128,7 +197,7 @@
     }
     UILabel *label =   (UILabel*)tap.view;
     label.textColor = [UIColor whiteColor];
-    label.backgroundColor = [UIColor orangeColor];
+    label.backgroundColor = YSKUColorFromRGB(0xd32f2f);;
     self.lastL = label;
 }
 

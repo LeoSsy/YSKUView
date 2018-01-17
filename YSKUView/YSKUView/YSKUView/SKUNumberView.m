@@ -130,7 +130,7 @@
 - (void)setShowHintLabel:(BOOL)showHintLabel {
     _showHintLabel = showHintLabel;
     if (showHintLabel) {
-        _hintLabel.frame = CGRectMake(_padding,_padding,self.frame.size.width,20);
+        _hintLabel.frame = CGRectMake(_padding,0,self.frame.size.width,20);
         _minusButton.frame = CGRectMake(_padding , CGRectGetMaxY(self.hintLabel.frame)+_padding, 40, 40);
         _textField.frame = CGRectMake(CGRectGetMaxX(self.minusButton.frame), self.minusButton.frame.origin.y, 50, 40);
         _topLine.frame = CGRectMake(self.textField.frame.origin.x, self.textField.frame.origin.y,  self.textField.frame.size.width, 0.8);
@@ -161,7 +161,7 @@
 - (UILabel *) hintLabel {
     if (!_hintLabel) {
         _hintLabel = [[UILabel alloc] initWithFrame:
-                      CGRectMake(_padding,_padding,self.frame.size.width,20)];
+                      CGRectMake(_padding,0,self.frame.size.width,20)];
         _hintLabel.backgroundColor = [UIColor clearColor];
         _hintLabel.font = [UIFont systemFontOfSize:_fontSize - 3];
         _hintLabel.text = @"购买数量";
